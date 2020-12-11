@@ -78,4 +78,6 @@ public class PremiumCalculatorServiceTest {
         String premium = premiumCalculatorService.calculate(policy);
         assertEquals("17.13 EUR", premium);
     }
+
+
 }

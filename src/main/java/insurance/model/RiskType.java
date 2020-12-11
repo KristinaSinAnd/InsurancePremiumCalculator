@@ -7,6 +7,9 @@ import java.util.function.Function;
 public enum RiskType {
 
     FIRE(sumInsured -> {
+        if (sumInsured.compareTo(BigDecimal.valueOf(0)) < 0) {
+            throw new RuntimeException("SumInsured can not be less than 0");
+        }
         if (sumInsured.compareTo(BigDecimal.valueOf(100)) > 0) {
             return sumInsured.multiply(BigDecimal.valueOf(0.024)).setScale(2, RoundingMode.HALF_EVEN);
         }
@@ -14,6 +17,9 @@ public enum RiskType {
     }),
 
     THEFT(sumInsured -> {
+        if (sumInsured.compareTo(BigDecimal.valueOf(0)) < 0) {
+            throw new RuntimeException("SumInsured can not be less than 0");
+        }
         if (sumInsured.compareTo(BigDecimal.valueOf(15)) > -1) {
             return sumInsured.multiply(BigDecimal.valueOf(0.05)).setScale(2, RoundingMode.HALF_EVEN);
         }

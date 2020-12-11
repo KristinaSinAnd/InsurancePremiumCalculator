@@ -10,6 +10,15 @@ public class Policy {
 
     private List<PolicyObject> policyObjects;
 
+    public Policy() {
+
+    }
+
+    public Policy(String policyNumber, PolicyStatus policyStatus, List<PolicyObject> policyObjects) {
+        this.policyNumber = policyNumber;
+        this.policyStatus = policyStatus;
+        this.policyObjects = policyObjects;
+    }
 
 
     public String getPolicyNumber() {
@@ -35,7 +44,6 @@ public class Policy {
     public void setPolicyObjects(List<PolicyObject> policyObjects) {
         this.policyObjects = policyObjects;
     }
-
 
 
     @Override

@@ -6,7 +6,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.function.Function;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class RiskTypeTest {
 
@@ -37,4 +38,21 @@ public class RiskTypeTest {
         BigDecimal actual = riskPremiumFunction.apply(BigDecimal.valueOf(15));
         assertEquals(BigDecimal.valueOf(0.75), actual);
     }
+
+    @Test
+    public void getFireRiskPremiumLessThan0() {
+        Function<BigDecimal, BigDecimal> riskPremiumFunction = RiskType.FIRE.getRiskPremium();
+        try {
+            BigDecimal actual = riskPremiumFunction.apply(BigDecimal.valueOf(-101));
+            fail("expected exception not thrown");
+
+        } catch (Exception e) {
+            assertEquals("SumInsured can not be less than 0", e.getMessage());
+            e.printStackTrace();
+        }
+
+    }
 }
+
+
+
