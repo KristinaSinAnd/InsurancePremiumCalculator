@@ -16,13 +16,17 @@ import static java.util.stream.Collectors.groupingBy;
 @Service
 public class PremiumCalculatorService {
 
-    public String calculate(Policy policy) {
+    private Map<RiskType, List<PolicySubObject>> groupByRiskType(Policy policy) {
+        return policy.getPolicyObjects().stream()
+                .map(PolicyObject::getPolicySubObjects)
+                .flatMap(List::stream)
+                .collect(groupingBy(PolicySubObject::getRiskType));
+    }
 
-        Map<RiskType, List<PolicySubObject>> groupedByRiskType = groupByRiskType(policy);
-
-        BigDecimal total = getTotal(groupedByRiskType);
-
-        return String.format("%s %s", total, Currency.getInstance("EUR").getCurrencyCode());
+    private BigDecimal getInsuranceSum(Map.Entry<RiskType, List<PolicySubObject>> groupedRiskType) {
+        return groupedRiskType.getValue().stream()
+                .map(PolicySubObject::getSumInsured)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     private BigDecimal getTotal(Map<RiskType, List<PolicySubObject>> groupedByRiskType) {
@@ -38,16 +42,14 @@ public class PremiumCalculatorService {
         return total;
     }
 
-    private BigDecimal getInsuranceSum(Map.Entry<RiskType, List<PolicySubObject>> groupedRiskType) {
-        return groupedRiskType.getValue().stream()
-                .map(PolicySubObject::getSumInsured)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    public String calculate(Policy policy) {
+
+        Map<RiskType, List<PolicySubObject>> groupedByRiskType = groupByRiskType(policy);
+
+        BigDecimal total = getTotal(groupedByRiskType);
+
+        return String.format("%s %s", total, Currency.getInstance("EUR").getCurrencyCode());
     }
 
-    private Map<RiskType, List<PolicySubObject>> groupByRiskType(Policy policy) {
-        return policy.getPolicyObjects().stream()
-                .map(PolicyObject::getPolicySubObjects)
-                .flatMap(List::stream)
-                .collect(groupingBy(PolicySubObject::getRiskType));
-    }
+
 }
