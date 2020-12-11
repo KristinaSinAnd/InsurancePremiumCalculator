@@ -10,7 +10,8 @@ It is also possible to extend implementation for new risk types in the future by
 No GUI is used, policy data is sent through the API directly to the methods. <br>
 No database is used, functionality doesn’t store any data. It receives policy object, calculates
 premium and returns result. <br>
-Calculation methods and functions are tested.
+Calculation methods and functions are tested.<br>
+Program is run from PremiumCalculatorApplication.
 
 ## **Premium calculation formula:**
 
